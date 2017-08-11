@@ -23,23 +23,67 @@
 //Test Basic constructor
 //Test Clozecard constructor 
 
+var fs = require('fs');
 
-var BasicCard = require("./BasicCard.js");
+var inquirer = require('inquirer');
+
+
+
+//var BasicCard = require("./BasicCard.js");
 var Clozecard = function(text,cloze) {
 	if(this instanceof Clozecard) {
 		this.fulltext = text;
 		this.cloze = cloze;
-        
-        this.partial = function() {
-        	if(this.fullText.includes(this.cloze)) {
-        		return this.fullText.replace(this.cloze, '...');
-        	} else {
-        		var brokenMsg = "Opps, the text: " +this.text+ "doesn't have the Cloze" + this.cloze + "'.";
-				return brokenClozeMessage; 
+		this.partial = function() {
+          if(this.fulltext.includes(this.cloze)) {
+        	 return this.fulltext.replace(this.cloze, '...');
+        	 } else {
+        	   var brokenMsg = "Opps, the text: " + this.fulltext + "doesn't have the Cloze" + this.cloze + "'.";
+			   return brokenMsg; 
 
-        	}
-        };
-	} else {
-		return new ClozeCard(text,cloze);
-	}
+       	}
+	};
 };
+};
+		Clozecard.prototype.createCard = function(){
+			inquirer.prompt([
+             {
+             	name: "fullText",
+             	message: "What's the statement including the answer?"
+             }, {
+             	name:"cloze",
+             	message: "What portion of the statement do you wish to quiz?"
+             }
+				]).then(function(response){
+					var newClozeQeestion = new Clozecard (
+						response.fullText,
+						response.cloze
+						);
+		    console.log(newClozeQeestion.partial()) 
+				});
+		};
+	//};	
+
+    //
+		Clozecard.prototype.errorMessage = function() {
+		 	if (error) throw error;
+		 };
+
+    module.exports = Clozecard;		
+
+        
+     
+//         };
+// 	} else {
+// 		return new ClozeCard(text,cloze);
+// 	}
+// };
+
+// var question = {
+// 	question0: "Name two programming paradigms importnat for Javascript app developers?"
+// 	question1:
+// 	question2:
+// 	question3:
+// 	question4:
+// 	question5:
+// }
